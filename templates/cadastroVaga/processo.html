@@ -1,0 +1,217 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="container contact-form" style="width: 86%;">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <div class="container bootdey flex-grow-1 container-p-y" style="margin-top: 4%; width: auto;">
+      <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+        <div class="media-body ml-4">
+          <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> PROCESSO Nº {{processo["id"]}}</strong></h3>
+          <a href="/adm"><img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /></a><br>
+        </div>
+      </div>
+
+      <form action = "/adm" id="formulario" method="POST">
+        <div class="card mb-4" style="margin-top: 2%;">
+          <h4 class="mt-4 mb-3"><strong>Dados da Solicitação</strong></h4>
+          <div class="card-body">
+            <table class="table user-view-table m-0">
+              <tbody>
+                <tr>
+                  <td>Status:</td>
+                  {% if processo["status"] == 0%}
+                    <td><span style="color:darkorange">Aguardando Aprovação</span></td>
+                  {% endif %}
+                  {% if processo["status"] == 1%}
+                    <td><span style="color:dodgerblue">Iniciado</span><button style="float: right;" type="button" id="definir_processo_button" onclick="validadeFormProcesso(this.id)">Definir Etapas</button> </td>
+                    <input type="hidden" disabled id="definir_processo" name="definir_processo" value="{{processo['id']}}">
+                  {% endif %}
+                  {% if processo["status"] == 2%}
+                    <td><span style="color:lightgreen">Em Andamento</span><a style="color: inherit;" href="#div_etapas"><button style="float: right;" type="button">Visualizar Etapas</button></a></td>
+                  {% endif %}
+                  {% if processo["status"] == 3%}
+                    <td ><span style="color:green">Concluído</span><button style="float: right;" type="button">Visualizar Etapas</button></td>
+                  {% endif %}
+                  {% if processo["status"] == 4%}
+                    <td style="color:darkred;">Suprimido</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td><nobr>Gestor Solicitante</nobr></td>
+                  <td>{{processo["gestor"]}}</td>
+                </tr>
+                <tr>
+                  <td>Setor Solicitante:</td>
+                  <td>{{processo["setor"]}}</td>
+                </tr>
+                <tr>
+                  <td><nobr>Data da Solicitação:</nobr></td>
+                  <td>{{processo["data"]}}</td>
+                </tr>
+                <tr>
+                  <td>Motivo:</td>
+                  {% if processo["motivo"] == '0'%}
+                    <td>Aumento de Quadro</td>
+                  {% endif %}
+                  {% if processo["motivo"] == '1'%}
+                    <td>Estágio</td>
+                  {% endif %}
+                  {% if processo["motivo"] == '2'%}
+                    <td>Serviço Temporário</td>
+                  {% endif %}
+                  {% if processo["motivo"] == '3'%}
+                    <td>Substituição de Colaborador</td>
+                  {% endif %}
+                  {% if processo["motivo"] == '4'%}
+                    <td>Cumprimento de Cota</td>
+                  {% endif %}
+                  {% if processo["motivo"] == '5'%}
+                    <td>Outro</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Justificativa:</td>
+                  <td>{{processo["justificativa"]}}</td>
+                </tr>
+                <tr>
+                  <td>Cargo Solicitado:</td>
+                  <td>{{processo["cargo"]}}</td>
+                </tr>
+                <tr>
+                  <td>Nº de Vagas:</td>
+                  <td>{{processo["numero_de_vagas"]}}</td>
+                </tr>
+                <tr>
+                  <td>Sexo:</td>
+                  {% if processo["sexo"] == 0%}
+                    <td>Indiferente</td>
+                  {% endif %}
+                  {% if processo["sexo"] == 1%}
+                    <td>Masculino</td>
+                  {% endif %}
+                  {% if processo["sexo"] == 2%}
+                    <td>Feminino</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td><nobr>Empresa Contratante:</nobr></td>
+                  <td>{{processo["empresa_contratante"]}}</td>
+                </tr>
+                <tr>
+                  <td><nobr>Local de Trabalho:</nobr></td>
+                  <td>{{processo["local"]}}</td>
+                </tr>
+                <tr>
+                  <td>Turno:</td>
+                  {% if processo["turno"] == 0%}
+                      <td>Indiferente</td>
+                  {% endif %}
+                  {% if processo["turno"] == 1%}
+                      <td>Diurno</td>
+                  {% endif %}
+                  {% if processo["turno"] == 2%}
+                      <td>Noturno</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Horario de Trabalho:</td>
+                  {% if processo["horario_de_trabalho"] == 0%}
+                      <td>Indiferente</td>
+                  {% endif %}
+                  {% if processo["horario_de_trabalho"] == 1%}
+                      <td>Segunda a Sexta</td>
+                  {% endif %}
+                  {% if processo["horario_de_trabalho"] == 2%}
+                      <td>Segunda a Sábado</td>
+                  {% endif %}
+                  {% if processo["horario_de_trabalho"] == 4%}
+                      <td>Escala</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td><nobr>Renumeração Proposta:</nobr></td>
+                  <td>R$ {{processo["renumeracao_proposta"]}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr class="border-light m-0">
+        </div>
+
+        {% if processo["status"] == 2 or processo["status"]== 3%}
+          <div id="div_etapas" class="card mb-4" style="margin-top: 2%;">
+            <h4 class="mt-4 mb-3"><strong>Etapas do Processo</strong></h4>
+            <div class="card-body" style="margin-left: 2%;">
+              {% for etapa in perguntas %}  
+              <h4 class="mt-4 mb-3"><strong>Etapa {{loop.index}}</strong></h4>
+                <table class="table user-view-table m-0">
+                  <tbody>
+                      {% for pergunta in etapa %} 
+                        <tr>
+                          <td>{{pergunta["descricao_pergunta"]}} 
+                            {% if pergunta["tipo_pergunta"] == '0'%}
+                              <span style="float: right;">Texto</span>
+                            {% endif %}
+                            {% if pergunta["tipo_pergunta"] == '1'%}
+                              <span style="float: right;">Texto Grande</span>
+                            {% endif %}
+                            {% if pergunta["tipo_pergunta"] == '2'%}
+                              <span style="float: right;">Múltipla Escolha</span>
+                            {% endif %}
+                            {% if pergunta["tipo_pergunta"] == '3'%}
+                              <span style="float: right;">Caixa de Seleção</span>
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                  </tbody>
+                </table>
+                {% endfor %}
+            </div>
+            <hr class="border-light m-0">
+          </div>
+        
+        
+          <h4 class="mt-4 mb-3"><strong>Participantes Selecionados</strong></h4>
+          <div id="div_candidatos_table" class="table-responsive">
+            <table id="candidatos_table" class="table-responsive table table-striped table-bordered center">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Sexo</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Nascimento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for candidato in candidatos_selecionados %}  
+                    <tr id="{{candidato[0]['id']}}">
+                      <td>{{candidato[0]["nome"]}}</td>
+                      {% if candidato[0]["sexo"] == 0%}
+                        <td>Masculino</td>
+                      {% endif %}
+                      {% if candidato[0]["sexo"] == 1%}
+                        <td>Feminino</td>
+                      {% endif %}
+                      {% if candidato[0]["sexo"] == 2%}
+                        <td>Indiferente</td>
+                      {% endif %}
+                      <td>{{candidato[0]["telefone"]}}</td>
+                      <td>{{candidato[0]["email"]}}</td>
+                      <td>{{candidato[0]["data_nascimento"]}}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+          </div>
+        {% endif %}
+        <div>
+          <input class="form-control btnContact" type="submit" value="Voltar" style="float: left;">
+        </div>
+      </form>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/processo.js') }}"></script>
+  </div>
+{% endblock %}

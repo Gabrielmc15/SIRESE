@@ -1,0 +1,549 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="container contact-form" >
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+        <div class="container bootdey flex-grow-1 container-p-y" style="margin-top: 4%; width: auto;">
+        
+        <div class="media align-items-center py-3 mb-3">
+            <div class="media-body ml-4">
+              <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 10%;"><strong>ATUALIZAR INFORMAÇÕES</strong></h3>
+              <img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /><br>
+            </div>
+        </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-info">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="card mb-4" style="margin-top: 2%;">
+            <h4 class="mt-4 mb-3"><strong>Dados do Candidato  </strong><button style="font-size: inherit;padding: 1px 6px;" class='modalBtn btn' value="ModalCandidato"><i class='fa fa-edit'></i></button></h4>
+            <div class="card-body">
+                <table class="table user-view-table m-0">
+                    <tbody>
+                        <tr>
+                            <td>Nome:</td>
+                            <td id="td_nome">{{candidato[0]["nome"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td id="td_email">{{candidato[0]["email"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Telefone:</td>
+                            <td id="td_telefone">{{candidato[0]["telefone"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>CEP:</td>
+                            <td id="td_cep">{{candidato[0]["cep"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Sexo:</td>
+                            {% if candidato[0]["sexo"] == 0%}
+                                <td id="td_sexo">Masculino</td>
+                            {% endif %}
+                            {% if candidato[0]["sexo"] == 1%}
+                                <td id="td_sexo">Feminino</td>
+                            {% endif %}
+                            {% if candidato[0]["sexo"] == 2%}
+                                <td id="td_sexo">Indiferente</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Estado Civil:</td>
+                            {% if candidato[0]["estado_civil"] == 0%}
+                                <td id="td_estado_civil">Solteiro</td>
+                            {% endif %}
+                            {% if candidato[0]["estado_civil"] == 1%}
+                                <td id="td_estado_civil">Casado</td>
+                            {% endif %}
+                            {% if candidato[0]["estado_civil"] == 2%}
+                                <td id="td_estado_civil">Indiferente</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Nascimento:</td>
+                            <td id="td_data_nascimento">{{candidato[0]["data_nascimento"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Dias Disponíveis:</td>
+                            {% if candidato[0]["dias_disponiveis"] == 0%}
+                                <td id="td_dias_disponiveis">Segunda a Sexta</td>
+                            {% endif %}
+                            {% if candidato[0]["dias_disponiveis"] == 1%}
+                                <td id="td_dias_disponiveis">Segunda a Sábado</td>
+                            {% endif %}
+                            {% if candidato[0]["dias_disponiveis"] == 2%}
+                                <td id="td_dias_disponiveis">Escala</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Turno Disponível:</td>
+                            {% if candidato[0]["turno_disponivel"] == 0%}
+                                <td id="td_turno_disponivel">Diurno</td>
+                            {% endif %}
+                            {% if candidato[0]["turno_disponivel"] == 1%}
+                                <td id="td_turno_disponivel">Noturno</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Disponibilidade Viagens:</td>
+                            {% if candidato[0]["disponibilidade_viagens"] == 0%}
+                                <td id="td_disponibilidade_viagens">Sim</td>
+                            {% endif %}
+                            {% if candidato[0]["disponibilidade_viagens"] == 1%}
+                                <td id="td_disponibilidade_viagens">Não</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Renumeração Pretendida:</td>
+                            <td id="td_renumeracao_pretendida">R$ {{candidato[0]["renumeracao_pretendida"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Cargo(s) Pretendido(s):</td>
+                            <td id="td_cargo_pretendido">
+                                {% for cargo in cargo_pretendido %}
+                                    {{cargo['descricao_cargo']}} <br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CNH:</td>
+                            {% if cnh[0] %}
+                                <td id="td_categoria">Tipo {{cnh[0]['categoria']}}</td>
+                            {% endif %}
+                            {% if not cnh[0] %}
+                                <td id="td_categoria">Não Possui</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Deficiência:</td>
+                            {% if deficiencia[0] %}
+                                <td id="td_descricao_pcd">{{deficiencia[0]['descricao_pcd']}}</td>
+                                <tr>
+                                    <td>Laudo:</td>
+                                    {% if deficiencia[0]["laudo"] == 0 %}
+                                       <td id="td_laudo">Não</td>
+                                    {% endif %}
+                                    {% if deficiencia[0]["laudo"] == 1 %}
+                                       <td id="td_laudo">Sim</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td>Observações:</td>
+                                    {% if deficiencia[0]["observacoes_pcd"] %}
+                                        <td id="td_observacoes_pcd">{{deficiencia[0]["observacoes_pcd"]}}</td>
+                                    {% endif %}
+                                    {% if not deficiencia[0]["observacoes_pcd"] %}
+                                        <td id="td_observacoes_pcd">-</td>
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                            {% if not deficiencia[0] %}
+                                <td>Não Possui</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr class="border-light m-0">
+        </div>
+        <div class="card">
+            <h4 class="mt-4 mb-3"><strong>Formações  </strong><button style="font-size: inherit;padding: 1px 6px;" class='modalBtn btn' value="ModalFormacoes"><i class='fa fa-edit'></i></button></h4>
+            <div id="div_formacao">
+                {% for numero in formacao %}
+                    <h5 class="mt-4 mb-3"><strong>{{loop.index}}ª Formação</strong></h5>
+                    <div class="card-body">
+                        <table id="tabela_formacao" class="table user-view-table m-0">
+                            <tbody>
+                                <tr>
+                                    <td><nobr>Curso:</nobr></td>
+                                    <td>{{numero["curso"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Instituição:</nobr></td>
+                                    <td>{{numero["instituicao"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Nível:</nobr></td>
+                                    <td>{{numero["nivel"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Situação:</nobr></td>
+                                    {% if numero["situacao"] == 0 %}
+                                        <td>Completo</td>
+                                    {% endif %}
+                                    {% if numero["situacao"] == 1 %}
+                                        <td>Cursando</td>
+                                    {% endif %}
+                                    {% if numero["situacao"] == 2 %}
+                                        <td>Trancado</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td><nobr>Início / Términio:</nobr></td>
+                                    <td>{{numero["inicio"]}} - {{numero["terminio_formacao"]}}</td>
+                                </tr>  
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card">
+            <h4 class="mt-4 mb-3"><strong>Experiencias  </strong><button style="font-size: inherit;padding: 1px 6px;" class='modalBtn btn' value="ModalExperiencias"><i class='fa fa-edit'></i></button></h4>
+            <div id="div_experiencia_">
+                {% for numero in experiencia %}
+                    <h5 class="mt-4 mb-3"><strong>{{loop.index}}ª Experiencia</strong></h5>
+                    <div class="card-body">
+                        <table id="tabela_experiencia_" class="table user-view-table m-0">
+                            <tbody>
+                                <tr>
+                                    <td><nobr>Empresa:</nobr></td>
+                                    <td>{{numero["empresa"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Cargo:</nobr></td>
+                                    <td>{{numero["cargo"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Início:</nobr></td>
+                                    <td>{{numero["ano_inicio_experiencia"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Fim:</nobr></td>
+                                    <td>{{numero["ano_fim_experiencia"]}}</td>
+                                </tr>
+                                <tr>
+                                    <td><nobr>Descrição</nobr></td>
+                                    <td>{{numero["descricao_experiencia"]}}</td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}    
+            </div>
+        </div>
+        <div class="card">
+            <h4 class="mt-4 mb-3"><strong>Habilidades </strong><button style="font-size: inherit;padding: 1px 6px;" class='modalBtn btn' value="ModalHabilidades"><i class='fa fa-edit'></i></button></h4>
+            <div id="div_habilidade_">
+                    <div class="card-body">
+                        <table id="tabela_experiencia_" class="table user-view-table m-0">
+                            <tbody>
+                                <tr>
+                                    <td><nobr>Habilidades:</nobr></td>
+                                    {% for numero in habilidade %}
+                                        <td>{{numero["tag"]}}</td>
+                                    {% endfor %}    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+        <form name="formulario" action = "/atualizarInfo" onsubmit="return organizarDados();" method ="POST">
+            <input class="form-control btnContact" type="submit" value="Confirmar" style="float: right;">
+            
+            <div id="ModalCandidato" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="info_candidato">
+                        <div class="card mb-4" style="margin-top: 2%;">
+                            <h4 class="mt-4 mb-3"><strong>Dados do Candidato</strong></h4>
+                            Nome Completo:<input  class="form-control" autocomplete="off" value="{% if candidato %}{{candidato[0]['nome']}}{% endif %}" name="nome" id="nome" placeholder="Nome" type="text" >
+                            Email:<input  class="form-control" autocomplete="off" value="{% if candidato %}{{candidato[0]['email']}}{% endif %}" name="email" id="email" placeholder="Email" type="text" >
+                            <p><span id="texto_email" style="color:rgb(207, 27, 27); display: none;">Insira um Email Válido.</span></p>
+                            Telefone:<input  class="form-control" autocomplete="off" maxlength="15" value="{% if candidato %}{{candidato[0]['telefone']}}{% endif %}" name="telefone" id="telefone" placeholder="Telefone" type="text" >
+                            <p><span id="texto_telefone" style="color:rgb(207, 27, 27); display: none;">Insira um Telefone Válido.</span></p>
+                            CEP:<input  class="form-control" autocomplete="off" value="{% if candidato %}{{candidato[0]['cep']}}{% endif %}" name="cep" id="cep" placeholder="CEP" type="text" >
+                            <p><span id="texto_cep" style="color:rgb(207, 27, 27); display: none;">Insira um CEP válido.</span></p>
+                            Sexo: <select class="form-control" id="sexo" name ="sexo">
+                                <option value="0">Masculino</option>
+                                <option value="1">Feminino</option>
+                              </select>
+                            Estado Civil:<select class="form-control" id="estado_civil" name ="estado_civil">
+                                <option value="0">Solteiro</option>
+                                <option value="1">Casado</option>
+                                <option value="2">Indiferente</option>
+                              </select>
+                            Data de Nascimento:<input class="form-control" value="{% if candidato %}{{candidato[0]['data_nascimento']}}{% endif %}" type="date" id="data_nascimento" name="data_nascimento">
+                            <p><span id="texto_data_nascimento" style="color:rgb(207, 27, 27); display: none;">Insira uma Data de nascimento válida.</span></p>
+                            
+                            Dias Disponíveis:<select class="form-control" id="dias_disponiveis" name="dias_disponiveis">
+                                <option value="0">Segunda a Sexta</option>
+                                <option value="1">Segunda a Sábado</option>
+                                <option value="2">Escala</option>
+                            </select>
+                        
+                            Turno Disponível:<select class="form-control" id="turno_disponivel" name="turno_disponivel">
+                                <option value="0">Diurno</option>
+                                <option value="1">Noturno</option>
+                            </select>
+                        
+                        
+                            Disponibilidade para Viagens:<select class="form-control" id="disponibilidade_viagens" name="disponibilidade_viagens">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+
+                            Renumeração Pretendida:<input style="text-align: left;" class="form-control form-inline" value="{% if candidato %}{{candidato[0]['renumeracao_pretendida']}}{% endif %}" type="text" id="renumeracao_pretendida" name="renumeracao_pretendida" placeholder="R$ 0"/>  
+
+                            CNH:<select class="form-control" id="categoria" name="categoria">
+                                <option value="">Não Possuo</option>
+                                <option value="A">Tipo A</option>
+                                <option value="B">Tipo B</option>
+                                <option value="C">Tipo C</option>
+                                <option value="D">Tipo D</option>
+                                <option value="E">Tipo E</option>
+                            </select>
+
+                            <p>Você Possui Alguma de Deficiência?
+                                <label class="switch">
+                                    <input id="deficiencia_checkbox" type="checkbox" {% if deficiencia[0] %}checked{% endif %} onclick="ShowDeficiencia(this)" style="text-align: right;">
+                                    <span class="slider round"></span>
+                                </label>
+                            </p>
+                            <div id="div_deficiencia" {% if not deficiencia[0] %}style="display: none"{% endif %}>
+                                Deficiência:
+                                <select class="form-control" name="descricao_pcd" id="descricao_pcd">
+                                  <option disabled selected value="">Selecionar</option>
+                                  <option value="Amputacao Membros Inferiores">Amputacao Membros Inferiores</option>
+                                  <option value="Amputacao Membros Superiores">Amputacao Membros Superiores</option>
+                                  <option value="Audição">Audição</option>
+                                  <option value="Deficiência Mental">Deficiência Mental</option>
+                                  <option value="Disfunção de Crescimento">Disfunção de Crescimento</option>
+                                  <option value="Fala">Fala</option>
+                                  <option value="Órtese">Órtese</option>
+                                  <option value="Perda de Funções Motoras">Perda de Funções Motoras</option>
+                                  <option value="Visão">Visão</option>
+                                  <option value="Outro">Outro</option>
+                                </select>
+                                <p><span id="texto_descricao_pcd" style="color:rgb(207, 27, 27); display: none;">Selecione uma opção.</span></p>
+
+                                Possui Laudo? <select class="form-control" name="laudo" id="laudo">
+                                  <option disabled selected value="">Selecionar</option>
+                                  <option value="1">Sim</option>
+                                  <option value="0">Não</option>
+                                </select>
+                                <p><span id="texto_laudo" style="color:rgb(207, 27, 27); display: none;">Selecione uma opção.</span></p>
+                            
+                                Observações: <input class="form-control" autocomplete="off" id="observacoes_pcd" name="observacoes_pcd" value="{% if deficiencia[0] %}{{deficiencia[0]['observacoes_pcd']}}{% endif %}" type="text" size="10">
+                            </div>
+
+                            <div>
+                                <div id="div_cargo">
+                                  Cargos Pretendidos:
+                                  <input class="form-control" autocomplete="off" id="cargo" name="cargo" value="" placeholder="Cargo" type="text" size="10">
+                                </div>
+                            </div>
+                            <p><span id="texto_cargo" style="color:rgb(207, 27, 27); display: none;">Você precisa adicionar pelo menos um cargo.</span></p>
+                            <div id="div_table_cargo" style="width: 100%;">
+                              <table id="table_cargo" class="table table-bordered table-striped table-responsive" {% if not cargo_pretendido[0] %}style="display: none;"{% endif %} style="text-align: center;">
+                                <thead> 
+                                </thead>
+                                <tbody>
+                                    {% for numero in cargo_pretendido %}
+                                        <tr>
+                                            <td style="font-weight: normal;text-align: center;">{{numero['descricao_cargo']}}</td>
+                                            <input type="hidden" id="cargo_pretendido{{loop.index0}}" name="cargo_pretendido{{loop.index0}}" value="{{numero['descricao_cargo']}}">
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                            </div>
+                            <div style="display: inline-block; width: 100%;">
+                              <input class="form-control btnContact" type="button" id="clear_cargo_button" value="Limpar" onclick="show('cargo')" style="float: left; width: auto; display: none;">
+                              <input class="form-control btnContact" type="button" disabled id="add_cargo_button" value="Adicionar Cargo " onclick="addCargoPretendido('cargo')" style="float: right;">
+                            </div>
+
+                            <P><input type="button" id="att_candidato_button" class="form-control btnContact" onclick="atualizaCandidato(); atualizaModal('cargo')" value="Atualizar Dados" style="float: right;"/></p>
+                            <p><hr style="margin-top: 6%;" class="border-light m-0"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ModalFormacoes" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="info_formacoes">
+                        <div class="card mb-4" style="margin-top: 2%;">
+                            <h4 class="mt-4 mb-3"><strong>Formações</strong></h4>
+                            <div id="div_formacao" style="display: block">
+                                <div id="div_curso">
+                                    Curso: <input class="form-control" autocomplete="off" id="curso" name="curso" value="" placeholder="Ex: Administração.." type="text" size="10">
+                                </div>
+                                <div id="div_instituicao">
+                                    Instituição: <input class="form-control" autocomplete="off" id="instituicao" name="instituicao" value="" placeholder="Ex: UFMA.." type="text" size="10">
+                                </div>
+                                Nível: <select class="form-control" id="nivel" name="nivel" >
+                                    <option disabled selected value="">Selecionar</option>
+                                    <option value="Superior">Superior</option>
+                                    <option value="Médio">Médio</option>
+                                    <option value="Técnico">Técnico</option>
+                                    <option value="Especialização">Especialização</option>
+                                    <option value="Certificação">Certificação</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                                Situação:<select class="form-control" id="situacao" name="situacao" onchange="checkformacao()">
+                                    <option disabled selected value="">Selecionar</option>
+                                    <option value="0">Completo</option>
+                                    <option value="1">Cursando</option>
+                                    <option value="2">Trancado</option>
+                                </select>
+                            
+                                Ano de Início: <input class="form-control" autocomplete="off" id="inicio" name="inicio" value="" placeholder="Ex: 2019.." type="text" size="10">
+                                <div>
+                                    Ano de Conclusão <span id="previsao_terminio_text" style="display:none;">(Previsto)</span> :
+                                </div>
+                                <input class="form-control" autocomplete="off" id="terminio_formacao" name="terminio_formacao" value="" placeholder="Ex: 2021.." type="text" size="10">                                                                                         
+                                <p><span id="texto_anos" style="color:rgb(207, 27, 27); display: none;">Ano de Início e/ou de Conclusão Inválido(s).</span></p>
+                            </div>
+                            <input type="button" id="add_formacao_button" disabled class="form-control btnContact" onclick="addRow('formacao');attRow('formacao')" value="Adicionar Formação" style="float: right;"/>
+
+                            <table id="table_formacao" class="table table-striped table-bordered center table-responsive" >
+                                <thead>
+                                    <tr>
+                                        <th>Curso</th>
+                                        <th>Instituição</th>
+                                        <th>Nível</th>
+                                        <th>Situação</th>
+                                        <th>Início</th>
+                                        <th>Conclusão</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for numero in formacao %}
+                                        <tr>
+                                            <th style="font-weight: normal;">{{numero['curso']}}</th>
+                                            <input type="hidden" id="curso{{loop.index}}" name="curso{{loop.index}}" value="{{numero['curso']}}">
+                                            <th style="font-weight: normal;">{{numero['instituicao']}}</th>
+                                            <input type="hidden" id="instituicao{{loop.index}}" name="instituicao{{loop.index}}" value="{{numero['instituicao']}}">
+                                            <th style="font-weight: normal;">{{numero['nivel']}}</th>
+                                            <input type="hidden" id="nivel{{loop.index}}" name="nivel{{loop.index}}" value="{{numero['nivel']}}">
+                                            {% if numero['situacao'] == 0%}
+                                                <th style="font-weight: normal;">Completo</th>
+                                            {% endif %}
+                                            {% if numero['situacao'] == 1%}
+                                                <th style="font-weight: normal;">Cursando</th>
+                                            {% endif %}
+                                            {% if numero['situacao'] == 2%}
+                                                <th style="font-weight: normal;">Trancado</th>                                            
+                                            {% endif %}
+                                            <input type="hidden" id="situacao{{loop.index}}" name="situacao{{loop.index}}" value="{{numero['situacao']}}">
+                                            <th style="font-weight: normal;">{{numero['inicio']}}</th>
+                                            <input type="hidden" id="inicio{{loop.index}}" name="inicio{{loop.index}}" value="{{numero['inicio']}}">
+                                            <th style="font-weight: normal;">{{numero['terminio_formacao']}}</th>
+                                            <input type="hidden" id="terminio_formacao{{loop.index}}" name="terminio_formacao{{loop.index}}" value="{{numero['terminio_formacao']}}">
+                                            <th style="font-weight: normal; text-align: center;"><button type="button" onclick="removeRow(this)" class='btn'><i class='fa fa-times'></i></button></th>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <input class="form-control btnContact" type="button" onclick="atualizaModal('formacao')" value="Atualizar Dados" style="float: right;">
+                        <hr class="border-light m-0">
+                    </div>
+                </div>
+            </div>
+
+            <div id="ModalExperiencias" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="info_experiencias">
+                        <div class="card mb-4" style="margin-top: 2%;">
+                            <h4 class="mt-4 mb-3"><strong>Experiências</strong></h4>
+                            <div id="div_experiencia" style="display:block">
+                                Empresa: <input  class="form-control" autocomplete="off" id="empresa" name="empresa" placeholder="Empresa" type="text" size="10">
+                                Cargo: <input  class="form-control" autocomplete="off" id="cargo_exp" name="cargo" placeholder="Cargo" type="text" size="10">
+                                Ano de Entrada: <input class="form-control" type="number" id="ano_inicio_experiencia" name="ano_inicio_experiencia">
+                                Ano de Saída: <input class="form-control" type="number" id="ano_fim_experiencia" name="ano_fim_experiencia">
+                                Principais Atividades: <input  class="form-control" autocomplete="off" id="descricao_experiencia" name="descricao_experiencia" placeholder="Descrição" type="text" size="10">
+                            </div>
+                            <input class="form-control btnContact" type="button" disabled id="add_experiencia_button" value="Adicionar Experiencia" onclick="addRow('experiencia');attRow('experiencia')" style="float: right;">
+                            <div style="width: auto;">
+                                <table id="table_experiencia" class="table-responsive table table-striped table-bordered center" >
+                                    <thead>
+                                        <tr>
+                                            <th>Empresa</th>
+                                            <th>Cargo</th>
+                                            <th>Entrada</th>
+                                            <th>Saída</th>
+                                            <th>Descrição</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for numero in experiencia %}
+                                            <tr>
+                                                <th style="font-weight: normal;">{{numero['empresa']}}</th>
+                                                <input type="hidden" id="empresa{{loop.index}}" name="empresa{{loop.index}}" value="{{numero['empresa']}}">
+                                                <th style="font-weight: normal;">{{numero['cargo']}}</th>
+                                                <input type="hidden" id="cargo{{loop.index}}" name="cargo{{loop.index}}" value="{{numero['cargo']}}">
+                                                <th style="font-weight: normal;">{{numero['ano_inicio_experiencia']}}</th>
+                                                <input type="hidden" id="ano_inicio_experiencia{{loop.index}}" name="ano_inicio_experiencia{{loop.index}}" value="{{numero['ano_inicio_experiencia']}}">
+                                                <th style="font-weight: normal;">{{numero['ano_fim_experiencia']}}</th>
+                                                <input type="hidden" id="ano_fim_experiencia{{loop.index}}" name="ano_fim_experiencia{{loop.index}}" value="{{numero['ano_fim_experiencia']}}">
+                                                <th style="font-weight: normal;">{{numero['descricao_experiencia']}}</th>
+                                                <input type="hidden" id="descricao_experiencia{{loop.index}}" name="descricao_experiencia{{loop.index}}" value="{{numero['descricao_experiencia']}}">
+                                                <th style="font-weight: normal; text-align: center;"><button type="button" onclick="removeRow(this)" class='btn'><i class='fa fa-times'></i></button></th>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <input class="form-control btnContact" type="button" onclick="atualizaModal('experiencia_')" value="Atualizar Dados" style="float: right;">
+                            <hr class="border-light m-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ModalHabilidades" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="info_habilidades">
+                        <div class="card mb-4" style="margin-top: 2%;">
+                            <p><h3><strong> Habilidades </strong></h3></p>
+                            <p>Adicione suass habilidades em forma de palavras chave. Ex: Scrum, Excel, Inglês...</p>
+
+                            <div class="input-group" id="div_habilidade">
+                                <input type="text" id="habilidade" name="habilidade" value="" placeholder="Habilidade" class="form-control">
+                                <span class="input-group-btn">
+                                    <input style="width: auto;" class="form-control btnContact"  type="button" id="add_habilidade_button" value="+" >
+                                </span>
+                            </div>
+                        
+                            <div id="div_tags_habilidade" style="margin-top: 1.5%;display:inline-block;">
+                                <!--
+                                <button style="border-radius: 2.5rem;line-height: 3em;display: inline-block" class="btnContact">Trello<span style="line-height: inherit;" class='close'>&times</span></button>
+                                -->
+                            </div>
+                            <input class="form-control btnContact" type="button" onclick="atualizaModal('habilidade_')" value="Atualizar Dados" style="float: right;margin-top: 4%;">
+                            <hr class="border-light m-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="id_candidato" value="{{candidato[0]['id']}}">
+        </form>
+        <div id="allList" style="display: none;">
+            <div id="lista_candidato">{{candidato}}</div>
+            <div id="lista_formacao">{{formacao}}</div>
+            <div id="lista_experiencia">{{experiencia}}</div>
+            <div id="lista_cargo_pretendido">{{cargo_pretendido}}</div>
+            <div id="lista_cnh">{{cnh}}</div>
+            <div id="lista_deficiencia">{{deficiencia}}</div>
+        </div>
+
+        <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/atualizarInfo.js') }}"></script>
+    </div>
+{% endblock %}

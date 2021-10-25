@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block body %}  
+    <div class="container contact-form" style="width: 86%;" >
+        <div id="add_processo"></div>
+        <div class="media align-items-center py-3 mb-3">
+            <div class="media-body ml-4">
+              <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 10%;"><strong> Solicitação de Pessoal</strong></h3>
+              <a href="adm"><img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /></a><br>
+            </div>
+        </div>
+        <form name="formulario" action = "/add_processo" method ="POST">
+            <h3><strong> Identificação do Solicitante </strong></h3>
+            <p> 
+                Gestor Solicitante:<span style="color:rgb(207, 27, 27);">*</span>  <input class="form-control" required autocomplete="off" name="gestor_solicitante" placeholder="Gestor" type="text" size="10">
+                Setor Solicitante:<span style="color:rgb(207, 27, 27);">*</span>  <input  class="form-control" required autocomplete="off"  name="setor_solicitante" placeholder="Setor" type="text" size="10">
+                Data:<span style="color:rgb(207, 27, 27);">*</span>  <input class="form-control" type="date" required id="data" name="data">    
+                Motivo:<span style="color:rgb(207, 27, 27);">*</span>  <select class="form-control" required name ="motivo" >
+                    <option disabled selected value="">Selecionar</option>
+                    <option value="0">Aumento de Quadro</option>
+                    <option value="1">Estágio</option>
+                    <option value="2">Serviço Temporário</option>
+                    <option value="3">Subistituição de Colaborador</option>
+                    <option value="4">Cumprimento de Cota</option>
+                    <option value="5">Outro</option>
+                </select>
+                Justificativa:<span style="color:rgb(207, 27, 27);">*</span>  <input  class="form-control" required autocomplete="off" id="justificativa" name="justificativa" placeholder="Justificativa" type="text" size="10">
+            </p>
+            <h3><strong> Identificação da Vaga </strong></h3>
+            <p class="text-left">
+                
+                <div id="div_titulo">
+                    Descriçao do Cargo:<span style="color:rgb(207, 27, 27);">*</span>  <input class="form-control" required autocomplete="off" id="titulo" name="titulo" placeholder="Cargo" type="text">   
+                </div>
+                Número de Vagas:<span style="color:rgb(207, 27, 27);">*</span>  <input class="form-control" required type="number" name= "numero_vagas" placeholder="0" min="0" step="1" >
+
+                Sexo:<span style="color:rgb(207, 27, 27);">*</span>  <select class="form-control" required name ="sexo">
+                    <option disabled selected value="">Selecionar</option>
+                    <option value="0">Indiferente</option>
+                    <option value="1">Masculino</option>
+                    <option value="2">Feminino</option>
+                </select>
+            </p>  
+            <p class="text-left">
+                Empresa Contratante:<span style="color:rgb(207, 27, 27);">*</span>  <input class="form-control" required autocomplete="off"  name="empresa_contratante" placeholder="Empresa" type="text">
+                Local de Trabalho:<span style="color:rgb(207, 27, 27);">*</span> <input class="form-control" required autocomplete="off" id="local" name="local" placeholder="Local" type="text">  
+                Turno:<span style="color:rgb(207, 27, 27);">*</span>  <select class="form-control" required name="turno">
+                    <option disabled selected value="">Selecionar</option>
+                    <option value="1">Indiferente</option>
+                    <option value="0">Diurno</option>
+                    <option value="2">Noturno</option>
+                </select>
+            </p>
+            <P class="text-left">
+                Horário de Trabalho:<span style="color:rgb(207, 27, 27);">*</span>  <select class="form-control" required name="horario_trabalho">
+                    <option disabled selected value="">Selecionar</option>
+                    <option value="0">Indiferente</option>
+                    <option value="1">Segunda a Sexta</option>
+                    <option value="2">Segunda a Sábado</option>
+                    <option value="3">Escala</option>
+                </select>
+                Renumeração Proposta:<span style="color:rgb(207, 27, 27);">*</span>  R$<input class="form-control" required type="number" name="renumeracao" min="0" step="any" placeholder="0"/>  
+            </P> 
+            <input class="form-control btnContact" type="submit" value="Adicionar" style="float: right;"> 
+            <div id="div_numero_processo"></div>
+        </form>
+
+        <form action = "/adm" method ="POST">
+            <input class="form-control btnContact" type="submit" value="Voltar" style="float: left;">
+        </form>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/scriptAdm.js') }}"></script>
+{% endblock %}

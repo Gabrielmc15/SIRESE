@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}  
+<div class="container contact-form" style="text-align: center;width: 55%;margin-top: 13%;">
+    <h3 class="title"><strong>Verificação</strong></h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger" style="width: 40%; margin:auto; margin-bottom: 1%;">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form id='formulario' action="/codigo_verificacao" method="POST" style="margin-bottom: 5%;">
+            <p>Para visualizar ou atualizar seus dados, insira o código de verificação de 6 digitos que foi enviado para o email {{verificacao["email_"]}}</p>
+            <div class="field" style="margin-bottom: 1%;">
+                <div class="control col-lg-4 col-lg-offset-4"> 
+                    <input style="text-align: center;" class="input form-control" type="text" name="codigo" required autocomplete="off" autofocus="">
+                    <p><span id="texto_codigo" style="color:rgb(207, 27, 27); display: none;">Código Inválido.</span></p>
+                    <input class="input" type="hidden" name="id" value="{{verificacao['id']}}">
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-lg-offset-4">
+                <button class="buttonform-control btn btn-primary">Enviar</button>
+                <p id="reenviar_codigo">Não recebeu o código?<br> <a onclick="validadeFormCodigoVerificacao()">Enviar novamente.</a></p>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/atualizarInfo.js') }}"></script>
+
+</div>
+{% endblock %}
+
+
+

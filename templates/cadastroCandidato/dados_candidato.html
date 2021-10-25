@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="container contact-form" style="width: 86%;">
+    <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+      <div class="media-body ml-4">
+        <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> Cadastro de Candidato</strong></h3>
+        <img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /><br>
+      </div>
+    </div>
+    
+    <div class="col-sm-12">
+      <form name="formulario" action = "/formacao" onsubmit="return validateFormIndex()" method ="POST">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+              <div class="alert alert-danger">
+                  {{ messages[0] }}
+              </div>
+          {% endif %}
+          {% endwith %}
+        <p> 
+          <p><h3 style="text-align: left;"><strong> Dados do Candidato </strong></h3></p>
+          Nome Completo:<span style="color:rgb(207, 27, 27);">*</span> <input  class="form-control" autocomplete="off" required value="{% if formulario_candidato %}{{formulario_candidato['nome']}}{% endif %}" name="nome" id="nome" placeholder="Nome" type="text" >
+          Email:<span style="color:rgb(207, 27, 27);">*</span> <input  class="form-control" autocomplete="off" required value="{% if formulario_candidato %}{{formulario_candidato['email']}}{% endif %}" name="email" placeholder="Email" type="email" size="10">
+          Telefone:<span style="color:rgb(207, 27, 27);">*</span> <input  class="form-control" autocomplete="off" required value="{% if formulario_candidato %}{{formulario_candidato['telefone']}}{% endif %}" name="telefone" id="telefone" placeholder="Ex: (98) 98888-8888" type="text"  maxlength="15" size="10">
+          Sexo:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="sexo" name="sexo">
+            <option disabled selected value="">Selecionar</option>
+            <option value="0">Masculino</option>
+            <option value="1">Feminino</option>
+          </select>
+          Estado Civil:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" id="estado_civil" required name ="estado_civil">
+            <option disabled selected value="">Selecionar</option>
+            <option value="0">Solteiro</option>
+            <option value="1">Casado</option>
+            <option value="2">Indiferente</option>
+          </select>
+          Data de Nascimento:<span style="color:rgb(207, 27, 27);">*</span> <input class="form-control" required value="{% if formulario_candidato %}{{formulario_candidato['data_nascimento']}}{% endif %}" type="date" id="data_nascimento" name="data_nascimento">
+          <p><span id="texto_data_nascimento" style="color:rgb(207, 27, 27); display: none;">Digite uma Data de Nascimento Válida.</span></p>
+          <p><h3><strong> Endereço </strong></h3></p>
+          CEP:<span style="color:rgb(207, 27, 27);">*</span>
+          <input class="form-control" autocomplete="off" required value="{% if formulario_candidato %}{{formulario_candidato['cep']}}{% endif %}" id="cep" name="cep" placeholder="CEP" maxlength="9" type="text" size="10">
+          Logradouro:<span style="color:rgb(207, 27, 27);">*</span> 
+          <input class="form-control" autocomplete="off" required value="{% if formulario_candidato %}{{formulario_candidato['logradouro']}}{% endif %}" id="logradouro" name="logradouro" placeholder="Logradouro" type="text" size="10">
+          Número da Residência:
+          <input class="form-control" autocomplete="off" id="numero" value="{% if formulario_candidato %}{{formulario_candidato['numero_residencia']}}{% endif %}" name="numero_residencia" placeholder="Número da Residência" type="text" size="10">
+          Complemento: <input  class="form-control" autocomplete="off" value="{% if formulario_candidato %}{{formulario_candidato['complemento']}}{% endif %}" id="complemento" name="complemento" placeholder="Complemento" type="text" size="10">
+          Bairro:<span style="color:rgb(207, 27, 27);">*</span> 
+          <input class="form-control" autocomplete="off" id="bairro" required value="{% if formulario_candidato %}{{formulario_candidato['bairro']}}{% endif %}" name="bairro" placeholder="Bairro" type="text" size="10">
+          Cidade:<span style="color:rgb(207, 27, 27);">*</span> 
+          <input class="form-control" autocomplete="off" id="cidade" required value="{% if formulario_candidato %}{{formulario_candidato['cidade']}}{% endif %}" name="cidade" placeholder="Cidade" type="text" size="10">
+        </p>
+        <input class="form-control btnContact" id="button_proximo" type="submit" value="Próximo" style="float: right;">
+      </form>
+    </div>
+    <script>
+      function setaselects(){
+          var sexo = "{% if formulario_candidato %}{{formulario_candidato['sexo']}}{% endif %}";
+          $("#sexo option").filter(function() {
+              return this.value == sexo;
+          }).attr('selected', true);
+        
+          var estado_civil = "{% if formulario_candidato %}{{formulario_candidato['estado_civil']}}{% endif %}";
+          $("#estado_civil option").filter(function() {
+              return this.value == estado_civil; 
+          }).attr('selected', true);
+      }
+
+      setaselects();
+    </script>
+  </div>
+{% endblock %}

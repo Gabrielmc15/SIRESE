@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block body %}  
+  <div class="container contact-form" style="width: 86%;">
+    <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+      <div class="media-body ml-4">
+        <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> Solicitação de Pessoal</strong></h3>
+        <img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /><br>
+      </div>
+    </div>
+    <form class="form-inline" id="formulario" action = "/controle_processo" method ="POST">
+      <p><h3><strong>Processos Aguardando Aprovação</strong></h3></p>
+      <div style="margin-top: 3%;" id="div_processos_table" class="table-responsive">
+        <table id="processos_table" class="table-striped table-bordered myTable">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Status</th>
+              <th style="text-align: center;">Cargo</th>
+              <th style="text-align: center;">Vagas</th>
+              <th style="text-align: center;">Setor</th>
+              <th style="text-align: center;">Renumeração</th>
+              <th style="text-align: center;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vaga in vaga_aguardando_aprovacao %}  
+              <tr>
+                <td style='text-align:center;'><button value="{{loop.index}}" class="modalBtn btn"><i class='fa fa-search'></i></button></td>
+                <td><nobr>{{vaga["cargo"]}}</nobr></td>  
+                <td style="text-align: center;"><nobr>{{vaga["numero_de_vagas"]}}</nobr></td>
+                <td><nobr>{{vaga["setor"]}}</nobr></td>
+                <td><nobr>R$ {{vaga["renumeracao_proposta"]}}</nobr></td>
+                <td style='text-align:center;'><nobr>
+                    <button type="button" id="processo_aprovado_button" value="{{vaga['id']}}" onclick="validadeFormProcesso(this)" class='btn'><i class='fa fa-check'></i></button>
+                    <button type="button" id="processo_recusado_button" value="{{vaga['id']}}" onclick="validadeFormProcesso(this)" class='btn'><i class='fa fa-times'></i></button>
+                </nobr></td>
+                <input type="hidden" id="processo_aprovado" disabled name="processo_aprovado" value="{{vaga['id']}}">
+                <input type="hidden" id="processo_recusado" disabled name="processo_recusado" value="{{vaga['id']}}">
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div  id="info_processo">
+            <div class="card mb-4" style="margin-top: 2%;">
+              <h4 class="mt-4 mb-3"><strong>Dados da Solicitação</strong></h4>
+              <div class="card-body">
+                  <table id="processo_selecionado" class="table user-view-table m-0">
+                    
+                  </table>
+              </div>
+              <hr class="border-light m-0">
+            </div>
+          </div>
+        </div>
+      
+      </div>
+    
+      
+    </form>
+
+    <div style="display: none;" id="lista_vaga">{{vaga_aguardando_aprovacao}}</div>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/controle_processo.js') }}"></script>
+  </div>
+{% endblock %}

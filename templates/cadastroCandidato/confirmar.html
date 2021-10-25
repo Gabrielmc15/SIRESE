@@ -1,0 +1,253 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="container contact-form" style="width: 86%;">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  
+        <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+          <div class="media-body ml-4">
+            <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> CONFIRMAR DADOS</strong></h3>
+            <img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /><br>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <h5 class="mt-4 mb-3"><strong>Dados do Candidato</strong></h5>
+          <div class="card-body">
+            <table class="table user-view-table m-0">
+              <tbody>
+                <tr>
+                  <td>Nome:</td>
+                  <td>{{formulario_candidato["nome"]}}</td>
+                </tr>
+                <tr>
+                  <td>CPF:</td>
+                  <td>{{cpf}}</td>
+                </tr>
+                <tr>
+                  <td>Email:</td>
+                  <td>{{formulario_candidato["email"]}}</td>
+                </tr>
+                <tr>
+                  <td>Telefone:</td>
+                  <td>{{formulario_candidato["telefone"]}}</td>
+                </tr>
+                <tr>
+                  <td>Sexo:</td>
+                  {% if formulario_candidato["sexo"] == '0'%}
+                      <td>Masculino</td>
+                  {% endif %}
+                  {% if formulario_candidato["sexo"] == '1'%}
+                      <td>Feminino</td>
+                  {% endif %}
+                  {% if formulario_candidato["sexo"] == '2'%}
+                      <td>Indiferente</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Estado Civil:</td>
+                  {% if formulario_candidato["estado_civil"] == '0'%}
+                      <td>Solteiro</td>
+                  {% endif %}
+                  {% if formulario_candidato["estado_civil"] == '1'%}
+                      <td>Casado</td>
+                  {% endif %}
+                  {% if formulario_candidato["estado_civil"] == '2'%}
+                      <td>Indiferente</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Nascimento:</td>
+                  <td>{{formulario_candidato["data_nascimento"]}}</td>
+                </tr>
+                <tr>
+                  <td>Dias Disponíveis:</td>
+                  {% if formulario_informacoes_adicionais["dias_disponiveis"] == '0'%}
+                      <td>Segunda a Sexta</td>
+                  {% endif %}
+                  {% if formulario_informacoes_adicionais["dias_disponiveis"] == '1'%}
+                      <td>Segunda a Sábado</td>
+                  {% endif %}
+                  {% if formulario_informacoes_adicionais["dias_disponiveis"] == '2'%}
+                      <td>Escala</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Turno Disponível:</td>
+                  {% if formulario_informacoes_adicionais["turno_disponivel"] == '0'%}
+                      <td>Diurno</td>
+                  {% endif %}
+                  {% if formulario_informacoes_adicionais["turno_disponivel"] == '1'%}
+                      <td>Noturno</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Viagens:</td>
+                  {% if formulario_informacoes_adicionais["disponibilidade_viagens"] == '0'%}
+                      <td>Possui Disponibilidade</td>
+                  {% endif %}
+                  {% if formulario_informacoes_adicionais["disponibilidade_viagens"] == '1'%}
+                      <td>Não Possui Disponibilidade</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Renumeração Pretendida:</td>
+                  <td>R$ {{formulario_informacoes_adicionais["renumeracao_pretendida"]}}</td>
+                </tr>
+                <tr>
+                  <td>Cargo(s) Pretendido(s):</td>
+                  <td>
+                  {% for numero in numero_cargo %}  
+                    {{formulario_informacoes_adicionais["cargo" + numero]}} / 
+                  {% endfor %}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Habilidades:</td>
+                  <td>
+                  {% for numero in range(formulario_formacao['numero_habilidades']|int) %}  
+                    {{formulario_formacao["habilidade" + numero|string]}} / 
+                  {% endfor %}
+                  </td>
+                </tr>
+                {% if formulario_informacoes_adicionais["descricao_pcd"]%}
+                  <tr>
+                    <td>Deficiência:</td>
+                    <td>{{formulario_informacoes_adicionais["descricao_pcd"]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Possui Laudo:</td>
+                    {% if formulario_informacoes_adicionais["laudo"] == '0'%}
+                      <td>Sim</td>
+                    {% endif %}
+                    {% if formulario_informacoes_adicionais["laudo"] == '1'%}
+                      <td>Não</td>
+                    {% endif %}
+                  </tr>
+                  {% if formulario_informacoes_adicionais["observacoes_pcd"]%}
+                    <tr>
+                      <td>Observações:</td>
+                      <td>{{formulario_informacoes_adicionais["observacoes_pcd"]}}</td>
+                    </tr>
+                  {% endif %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <hr class="border-light m-0">
+        </div>
+        <div class="card">
+          <h5 class="mt-4 mb-3"><strong>Endereço</strong></h5>
+          <div class="card-body">
+            <table class="table user-view-table m-0">
+              <tbody>
+                <tr>
+                  <td>CEP:</td>
+                  <td>{{formulario_candidato["cep"]}}</td>
+                </tr>
+                <tr>
+                  <td>Logradouro:</td>
+                  <td>{{formulario_candidato["logradouro"]}}</td>
+                </tr>
+                <tr>
+                  <td>Número:</td>
+                  <td>{{formulario_candidato["numero_residencia"]}}</td>
+                </tr>
+                <tr>
+                  <td>Complemento:</td>
+                  <td>{{formulario_candidato["complemento"]}}</td>
+                </tr>
+                <tr>
+                  <td>Bairro:</td>
+                  <td>{{formulario_candidato["bairro"]}}</td>
+                </tr>
+                <tr>
+                  <td>Cidade:</td>
+                  <td>{{formulario_candidato["cidade"]}}</td>
+                </tr>
+              </tbody>
+            </table>
+            {% if numero_formacao%}
+              <h4 class="mt-4 mb-3"><strong>Formações</strong></h4>
+            {% endif %}
+            {% for numero in numero_formacao %}  
+            <h5 class="mt-4 mb-3"><strong>{{loop.index}}ª Formação</strong></h5>
+            <input type="hidden" id ="linhas_formacao" name = "linhas_formacao" value="{{formulario_formacao['linhas_formacao']}}">          
+              <table class="table user-view-table m-0">
+                <tbody>
+                  <tr>
+                    <td>Curso:</td>
+                    <td>{{formulario_formacao["curso" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Instituição:</td>
+                    <td>{{formulario_formacao["instituicao" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Nível:</td>
+                    <td>{{formulario_formacao["nivel" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Situação:</td>
+                    {% if formulario_formacao["situacao" + numero] == '0'%}
+                        <td>Completo</td>
+                    {% endif %}
+                    {% if formulario_formacao["situacao" + numero] == '1'%}
+                        <td>Cursando</td>
+                    {% endif %}
+                    {% if formulario_formacao["situacao" + numero] == '2'%}
+                        <td>Trancado</td>
+                    {% endif %}
+                  </tr>
+                  <tr>
+                    <td>Início:</td>
+                    <td>{{formulario_formacao["inicio" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Conclusão:</td>
+                    <td>{{formulario_formacao["terminio_formacao" + numero]}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            {% endfor %}
+            {% if numero_experiencia%}
+              <h4 class="mt-4 mb-3"><strong>Experiências</strong></h4>
+            {% endif %}
+            {% for numero in numero_experiencia %}  
+              <h5 class="mt-4 mb-3"><strong>{{loop.index}}ª Experiência</strong></h5>
+              <table class="table user-view-table m-0">
+                <tbody>
+                  <tr>
+                    <td>Empresa:</td>
+                    <td>{{formulario_formacao["empresa" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Cargo:</td>
+                    <td>{{formulario_formacao["cargo" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Inicio:</td>
+                    <td>{{formulario_formacao["ano_inicio_experiencia" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Términio:</td>
+                    <td>{{formulario_formacao["ano_fim_experiencia" + numero]}}</td>
+                  </tr>
+                  <tr>
+                    <td>Descrição:</td>
+                    <td>{{formulario_formacao["descricao_experiencia" + numero]}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            {% endfor %}
+          </div>
+        </div>
+        <form class='contact-form' style="width: 90%;" name="formulario" action = "/success" method ="POST">
+          <input class="form-control btnContact" type="submit" value="Confirmar" style="float: right;">
+        </form>
+        <form class='contact-form' action = "/informacoes_adicionais" method ="POST">
+          <input class="form-control btnContact" type="submit" value="Voltar" style="float: left;">
+        </form>
+      </div> 
+    </div>
+{% endblock %}

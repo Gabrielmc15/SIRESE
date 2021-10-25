@@ -1,0 +1,206 @@
+{% extends "layout.html" %}
+
+{% block body %}  
+  <div class="container contact-form" style="width: 86%;">
+    <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+      <div class="media-body ml-4">
+        <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> Solicitação de Pessoal</strong></h3>
+        <a href="adm"><img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /></a><br>
+      </div>
+    </div>
+    <form class="form-inline" name="formulario" action = "/processo" method ="POST">
+      <p><h3><strong>Processos</strong></h3></p>
+      <p style="display: none;"><strong>Editar Colunas da Tabela </strong>
+        <label class="switch">
+          <input id="edicao_checkbox" type="checkbox" onclick="editaTabela()" style="text-align: right;">
+          <span class="slider round"></span>
+        </label>
+      </p>
+      <div id="edicao_tabela" class="form-inline" style="text-align: center;display: none; border-top: 1px solid #1e1e3031;border-bottom: 1px solid #1e1e3031;">
+        <p style="text-align: left;">Marque as colunas que você deseja visualizar.</p>
+        <nobr>
+          Id <label class="switch">
+            <input id="show_id" type="checkbox" value="id" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Status <label class="switch">
+            <input id="show_status" type="checkbox" value="status" checked style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Gestor Solicitante <label class="switch">
+            <input id="show_gestor" type="checkbox" value="gestor" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Setor <label class="switch">
+            <input id="show_setor" type="checkbox" value="setor" checked style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Data <label class="switch">
+            <input id="show_data" type="checkbox" value="data" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>    
+        <nobr>
+          Motivo da Solicitação <label class="switch">
+            <input id="show_motivo" type="checkbox" value="motivo" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>    
+        <nobr>
+          Justificativa <label class="switch">
+            <input id="show_justificativa" type="checkbox" value="justificativa" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Cargo Solicitado <label class="switch">
+            <input id="show_cargo" type="checkbox" checked value="cargo" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Numero de Vagas <label class="switch">
+            <input id="show_numero_de_vagas" type="checkbox" checked value="numero_de_vagas" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>    
+        <nobr>
+          Sexo <label class="switch">
+            <input id="show_sexo" type="checkbox" value="sexo" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>    
+        <nobr>
+          Empresa <label class="switch">
+            <input id="show_empresa_contratante" type="checkbox" value="empresa_contratante" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Local de Trabalho <label class="switch">
+            <input id="show_local" type="checkbox" value="local" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>    
+        <nobr>
+         Turno <label class="switch">
+            <input id="show_turno" type="checkbox" value="turno" style="text-align: right;">
+            <span class="slider round"></span>
+          </label>
+        </nobr>
+        <nobr>
+          Horario <label class="switch">
+             <input id="show_horario_de_trabalho" type="checkbox" value="horario_de_trabalho" style="text-align: right;">
+             <span class="slider round"></span>
+           </label>
+        </nobr>
+        <nobr>
+          Renumeração <label class="switch">
+             <input id="show_renumeracao_proposta" type="checkbox" checked value="renumeracao_proposta" style="text-align: right;">
+             <span class="slider round"></span>
+           </label>
+        </nobr>
+      </div>
+      <div style="margin-top: 3%;" id="div_processos_table" class="table-responsive">
+        <table id="processos_table" class="table-striped table-bordered myTable">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Status</th>
+              <th style="text-align: center;">Cargo</th>
+              <th style="text-align: center;">Vagas</th>
+              <th style="text-align: center;">Setor</th>
+              <th style="text-align: center;">Empresa</th>
+              <th style="text-align: center;">Renumeração</th>
+              <th style="text-align: center;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vaga in vaga_aguardando_aprovacao %}  
+              <tr>
+                <td style='text-align:center;'><nobr><i class='fa fa-circle tooltip' style='color:darkorange;'><span class='tooltiptext'>Aguardando Aprovação</span></i></nobr></td>
+                <td><nobr>{{vaga["cargo"]}}</nobr></td>
+                <td style="text-align: center;"><nobr>{{vaga["numero_de_vagas"]}}</nobr></td>
+                <td><nobr>{{vaga["setor"]}}</nobr></td>
+                <td><nobr>{{vaga["empresa_contratante"]}}</nobr></td>
+                <td><nobr>R$ {{vaga["renumeracao_proposta"]}}</nobr></td>
+                <td style='text-align:center;'><button id="{{vaga['id']}}" name="{{vaga['id']}}" onclick='validateFormAdm(this.name);' class='btn'><i class='fa fa-search'></i></button></td>
+              </tr>
+            {% endfor %}
+            {% for vaga in vaga_iniciado %}  
+              <tr>
+                <td style='text-align:center;'><nobr><i class='fa fa-circle tooltip' style='color:dodgerblue;'><span class='tooltiptext'>Iniciado</span></i></nobr></td>
+                <td><nobr>{{vaga["cargo"]}}</nobr></td>
+                <td style="text-align: center;"><nobr>{{vaga["numero_de_vagas"]}}</nobr></td>
+                <td><nobr>{{vaga["setor"]}}</nobr></td>
+                <td><nobr>{{vaga["empresa_contratante"]}}</nobr></td>
+                <td><nobr>R$ {{vaga["renumeracao_proposta"]}}</nobr></td>
+                <td style='text-align:center;'><button id="{{vaga['id']}}" name="{{vaga['id']}}" onclick='validateFormAdm(this.name);' class='btn'><i class='fa fa-search'></i></button></td>
+              </tr>
+            {% endfor %}
+            {% for vaga in vaga_em_andamento %}  
+              <tr>
+                <td style='text-align:center;'><nobr><i class='fa fa-circle tooltip' style='color:lightgreen;'><span class='tooltiptext'>Em Andamento</span></i></nobr></td>
+                <td><nobr>{{vaga["cargo"]}}</nobr></td>
+                <td style="text-align: center;"><nobr>{{vaga["numero_de_vagas"]}}</nobr></td>
+                <td><nobr>{{vaga["setor"]}}</nobr></td>
+                <td><nobr>{{vaga["empresa_contratante"]}}</nobr></td>
+                <td><nobr>R$ {{vaga["renumeracao_proposta"]}}</nobr></td>
+                <td style='text-align:center;'><button id="{{vaga['id']}}" name="{{vaga['id']}}" onclick='validateFormAdm(this.name);' class='btn'><i class='fa fa-search'></i></button></td>
+              </tr>
+            {% endfor %}
+            {% for vaga in vaga_concluido %}  
+              <tr>
+                <td style='text-align:center;'><nobr><i class='fa fa-circle tooltip' style='color:green;'><span class='tooltiptext'>Concluído</span></i></nobr></td>
+                <td><nobr>{{vaga["cargo"]}}</nobr></td>
+                <td style="text-align: center;"><nobr>{{vaga["numero_de_vagas"]}}</nobr></td>
+                <td><nobr>{{vaga["setor"]}}</nobr></td>
+                <td><nobr>{{vaga["empresa_contratante"]}}</nobr></td>
+                <td><nobr>R$ {{vaga["renumeracao_proposta"]}}</nobr></td>
+                <td style='text-align:center;'><button id="{{vaga['id']}}" name="{{vaga['id']}}" onclick='validateFormAdm(this.name);' class='btn'><i class='fa fa-search'></i></button></td>
+              </tr>
+            {% endfor %}
+            {% for vaga in vaga_cancelado %}  
+              <tr>
+                <td style='text-align:center;'><nobr><i class='fa fa-circle tooltip' style='color:darkred;'><span class='tooltiptext'>Suprimido</span></i></nobr></td>
+                <td><nobr>{{vaga["cargo"]}}</nobr></td>
+                <td style="text-align: center;"><nobr>{{vaga["numero_de_vagas"]}}</nobr></td>
+                <td><nobr>{{vaga["setor"]}}</nobr></td>
+                <td><nobr>{{vaga["empresa_contratante"]}}</nobr></td>
+                <td><nobr>R$ {{vaga["renumeracao_proposta"]}}</nobr></td>
+                <td style='text-align:center;'><button id="{{vaga['id']}}" name="{{vaga['id']}}" onclick='validateFormAdm(this.name);' class='btn'><i class='fa fa-search'></i></button></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div id="div_numero_processo"></div>
+    </form>
+
+    <form class="form-inline" name="formulario" action ="/add_processo" method ="GET">
+      <input class="form-control btnContact" type="submit" value="Adicionar Processo" style="float: right;">
+    </form>
+
+    <form style="display: none;" class="form-inline" action="/buscar" method ="GET">
+      <p class="form-inline"> 
+        <input style="float: left;" type="submit" id="add_vaga_button" class="form-control btnContact" value="Buscar Candidatos"/>
+      </p>
+    </form>
+    
+    <div style="display: none;" id="lista_vaga">{{vaga}}</div>
+    <div style="display: none;" id="lista_candidato_solicitante">{{candidato_solicitante}}</div>
+    <div style="display: none;" id="lista_candidato">{{candidato}}</div>
+    <div style="display: none;" id="lista_cargo_pretendido">{{cargo_pretendido}}</div>
+    
+    
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/scriptAdm.js') }}"></script>
+  </div>
+{% endblock %}

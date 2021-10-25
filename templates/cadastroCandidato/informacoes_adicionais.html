@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="container contact-form" style="width: 86%;">
+        <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+          <div class="media-body ml-4">
+            <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> Informações Adicionais</strong></h3>
+            <img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /><br>
+          </div>
+        </div>
+        <div class='col-sm-12'>
+          <form name="formulario" action = "/confirmar" onsubmit="return validateFormInformacoesAdicionais()" method ="POST">
+            <p>
+              <div id="div_cargo">
+                <p>Cargo Pretendido:<span style="color:rgb(207, 27, 27);">*</span> </p>
+                <input class="form-control" autocomplete="off" id="cargo" name="cargo" value="" placeholder="Cargo" required type="text" size="10">
+              </div>
+              <div id="div_table_cargo" style="display: none;width: 100%;">
+                <table id="table_cargo" class="table table-bordered table-striped" style="display: none;text-align: center;">
+                  <thead>
+                      <tr>
+                      </tr>
+                  </thead>
+                </table>
+              </div>
+              <div style="display: inline-block; width: 100%;">
+                <input class="form-control btnContact" type="button" disabled id="add_cargo_button" value="Adicionar Cargo " onclick="addRow('cargo')" style="float: right;">
+              </div>
+              <div style="margin-top: 2%;">
+                  Dias Disponíveis:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="dias_disponiveis" name="dias_disponiveis">
+                      <option disabled selected value="">Selecionar</option>
+                      <option value="0">Segunda a Sexta</option>
+                      <option value="1">Segunda a Sábado</option>
+                      <option value="2">Escala</option>
+                  </select>
+                  Turno Disponível:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="turno_disponivel" name="turno_disponivel">
+                      <option disabled selected value="">Selecionar</option>
+                      <option value="0">Diurno</option>
+                      <option value="1">Noturno</option>
+                  </select>
+                  Renumeração Pretendida:<span style="color:rgb(207, 27, 27);">*</span> <input class="form-control form-inline" required value="{% if formulario_informacoes_adicionais %}{{formulario_informacoes_adicionais['renumeracao_pretendida']}}{% endif %}" type="number" name="renumeracao_pretendida" min="0" step="any" placeholder="R$ 0"/>  
+                  Disponibilidade para Viagens:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="disponibilidade_viagens" name="disponibilidade_viagens">
+                      <option disabled selected value="">Selecionar</option>
+                      <option value="1">Sim</option>
+                      <option value="0">Não</option>
+                  </select>
+                  CNH:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="categoria" name="categoria">
+                      <option disabled selected value="">Selecionar</option>
+                      <option value="">Não Possuo</option>
+                      <option value="A">Tipo A</option>
+                      <option value="B">Tipo B</option>
+                      <option value="C">Tipo C</option>
+                      <option value="D">Tipo D</option>
+                      <option value="E">Tipo E</option>
+                  </select>
+              </div>
+              <p>Você Possui Alguma de Deficiência? <span style="color:rgb(207, 27, 27);">*</span>
+                <label class="switch">
+                    <input id="deficiencia_checkbox" type="checkbox" onclick="ShowDeficiencia(this)" style="text-align: right;">
+                    <span class="slider round"></span>
+                </label>
+              </p>
+              <div id="div_deficiencia" style="display: none">
+                  Deficiência:<span style="color:rgb(207, 27, 27);">*</span> 
+                  <select class="form-control" name="descricao_pcd" id="descricao_pcd">
+                    <option disabled selected value="">Selecionar</option>
+                    <option value="Amputacao Membros Inferiores">Amputacao Membros Inferiores</option>
+                    <option value="Amputacao Membros Superiores">Amputacao Membros Superiores</option>
+                    <option value="Audição">Audição</option>
+                    <option value="Deficiência Mental">Deficiência Mental</option>
+                    <option value="Disfunção de Crescimento">Disfunção de Crescimento</option>
+                    <option value="Fala">Fala</option>
+                    <option value="Órtese">Órtese</option>
+                    <option value="Perda de Funções Motoras">Perda de Funções Motoras</option>
+                    <option value="Visão">Visão</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                  Possui Laudo? <select class="form-control" name="laudo" id="laudo">
+                    <option disabled selected value="">Selecionar</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                  </select>
+                  Observações: <input class="form-control" autocomplete="off" id="observacoes_pcd" name="observacoes_pcd" value="" type="text" size="10">
+              </div>
+              <input class="form-control btnContact" type="submit" value="Próximo" style="float: right;">
+            </p>
+            </form>
+          <form  action = "/formacao" method ="POST">
+            <input class="form-control btnContact" type="submit" value="Voltar" style="float: left;">
+          </form>
+        </div>
+        <script>
+          function setaselects(){   
+              var dias_disponiveis = "{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['dias_disponiveis']}}{% endif %}";
+              $("#dias_disponiveis option").filter(function() {
+                  return this.value == dias_disponiveis; 
+              }).attr('selected', true);
+            
+              var turno_disponivel = "{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['turno_disponivel']}}{% endif %}";
+              $("#turno_disponivel option").filter(function() {
+                  return this.value == turno_disponivel; 
+              }).attr('selected', true);
+            
+              //o texto nao vale para esse pois é um texto personalizado
+              var disponibilidade_viagens = "{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['disponibilidade_viagens']}}{% endif %}";
+              $("#disponibilidade_viagens option").filter(function() {
+                  return this.value == disponibilidade_viagens; 
+              }).attr('selected', true);
+            
+              var categoria = "{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['categoria']}}{% endif %}";
+              $("#categoria option").filter(function() {
+                  return this.value == categoria; 
+              }).attr('selected', true);
+
+              if("{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['descricao_pcd']}}{% endif %}"){
+                $("#deficiencia_checkbox").prop("checked", true)
+
+                var div_deficiencia = document.getElementById("div_deficiencia");
+                document.getElementById("descricao_pcd").required = deficiencia_checkbox.checked ? true : false;
+                document.getElementById("laudo").required = deficiencia_checkbox.checked ? true : false;
+
+                div_deficiencia.style.display = deficiencia_checkbox.checked ? "block" : "none";
+              }else{
+                $("#deficiencia_checkbox").prop("checked", false)
+              }
+    
+              var descricao_pcd = "{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['descricao_pcd']}}{% endif %}";
+              $("#descricao_pcd option").filter(function() {
+                  return this.value == descricao_pcd; 
+              }).attr('selected', true);
+            
+              var laudo = "{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['laudo']}}{% endif %}";
+              $("#laudo option").filter(function() {
+                  return this.value == laudo; 
+              }).attr('selected', true);
+
+              $("#observacoes_pcd").prop("value","{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais['observacoes_pcd']}}{% endif %}");
+          }
+    
+          setaselects();
+        </script>
+    </div>
+    <div id="lista_informacoes_adicionais" style="display: none;">{% if formulario_informacoes_adicionais%}{{formulario_informacoes_adicionais}}{% endif %}</div>
+{% endblock %}

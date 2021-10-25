@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}  
+<div class="container contact-form p-3 my-3 border"" style="text-align: center;width: 75%;">
+    <h3 class="title col-md-"><strong>Aviso de Privacidade</strong></h3>
+
+    <form id='formulario' action="/verificaCPF" onsubmit="return validaFormulario()" method="POST" style="margin-bottom: 5%;">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sed turpis imperdiet, aliquam massa et, posuere leo. Nam felis lectus, efficitur et congue viverra, tempus a ligula. Ut a posuere eros. Donec nec consequat orci. Pellentesque quis vulputate mauris, et faucibus dolor. Ut leo eros, volutpat eu ex et, vehicula lacinia mi. Vivamus in tellus cursus, condimentum lectus ac, cursus justo. Maecenas nec mollis quam. Cras eget hendrerit mauris. Vivamus aliquet odio ac elit auctor consectetur. Maecenas leo metus, faucibus ac faucibus dapibus, auctor quis orci. Sed vitae mi rhoncus, scelerisque justo in, iaculis risus. Nullam fringilla, risus vitae volutpat hendrerit, erat arcu pulvinar ex, in suscipit dui sem vitae mi. Fusce tincidunt, magna vitae vulputate laoreet, justo lorem iaculis metus, at hendrerit neque eros quis erat. Duis at ligula et sapien maximus auctor eget eget tellus.</p>
+        <p>Aliquam ullamcorper enim et magna sagittis, ut porta nibh vehicula. Etiam dignissim ante est, ac dictum nulla laoreet ut. Cras eget purus fermentum, malesuada ex ac, interdum risus. Fusce id lorem molestie, aliquam risus nec, feugiat sapien. Praesent luctus lobortis ligula eget faucibus. Aenean tristique, tellus nec viverra efficitur, lacus risus malesuada libero, sed cursus nibh leo sit amet nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sed pulvinar purus. Fusce dignissim elementum laoreet. Proin dapibus pretium diam sed posuere. In a condimentum urna. Vestibulum quis erat hendrerit risus rhoncus condimentum nec a purus. Proin nec dictum orci, non gravida metus. Donec vulputate nunc id nisl volutpat semper. Curabitur at blandit libero, ut iaculis metus.</p>
+        <p>Cras placerat pellentesque augue, ac rutrum diam iaculis tristique. Donec vitae nibh at dolor dictum aliquet id et nisi. Sed non tempor lorem, vitae tristique odio. Sed vel odio quam. Nulla facilisi. Praesent rhoncus turpis id nisi varius porttitor. Nam tristique mollis orci, et bibendum sem. Integer congue, metus ut efficitur suscipit, mauris tortor finibus risus, ullamcorper eleifend sapien quam ac mi. Maecenas id metus dapibus, commodo tellus ut, varius lectus. Maecenas fermentum, nibh eget congue placerat, metus ipsum venenatis felis, vitae tempor mi metus quis felis. Aliquam sit amet nisl sapien.</p>
+        <p style="text-align: left;padding-bottom: 3%;"><input style="vertical-align: middle;position: relative;bottom: 4px;" type="checkbox" id="checkbox_termo" name="checkbox_termo" value="1"> Aceito os termos acima.
+            <br><span id="texto_checkbox" style="color:rgb(207, 27, 27); display: none;">* Você precisa concordar para continuar.</span>
+        </p>
+
+
+        <input  style="float: right;margin-bottom: 5%;" type="submit" id="button_proximo" class="btn btn-primary" value="Próximo">
+        
+    </form>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/atualizarInfo.js') }}"></script>
+
+    <script>
+        function validaFormulario(){
+            if(!($("#checkbox_termo").prop('checked'))){
+                $("#texto_checkbox").css("display","block");
+                return false;
+            }
+            $("#button_proximo").prop("disabled",true);
+        }
+    </script>
+</div>
+{% endblock %}

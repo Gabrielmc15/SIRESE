@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block body %}  
+    <div class="container contact-form" style="width: 86%;">
+        <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+            <div class="media-body ml-4">
+              <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> PROCESSO</strong></h3>
+              <a href="/adm"><img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /></a><br>
+            </div>
+        </div>
+        <form name="formulario" action = "/etapas_processo" onsubmit="return validateFormEtapasProcesso()" method ="POST">
+            <p>
+                <h3><strong>Definir Etapas</strong></h3> 
+                <button class="btn" id="botao_add_etapa" value=1 onclick="addEtapa(); return false" style="margin-left: 1%;"><i class='fa fa-plus'></i></button>
+                <button class="btn" id="botao_remove_etapa" disabled value=1 onclick="removeEtapa(); return false" style="margin-left: 1%;"><i class='fa fa-minus'></i></button>
+                
+                <input style="float: right;" type="submit" class="form-control btnContact" value="Definir Processo"/>
+            </p>
+            <input type="hidden" name="numero_etapas" id="numero_etapas" value="1">
+            
+
+            <div id="idetapa1">
+                <p><h4><strong>Etapa Nº 1</strong></h4></p>
+                <input type="hidden" id="etapa1numero_perguntas" name="etapa1numero_perguntas" value="1">
+
+                <div id="idetapa1pergunta1" class="form-inline pergunta">
+                    <input style="width: 74%;" class="form-control" type="text" required name="pergunta1etapa1" id="pergunta1etapa1" value="" placeholder="Pergunta Nº 1">
+                    <select style="width: 24%;" class="form-control" required id="tipo_pergunta1etapa1" name ="tipo_pergunta1etapa1">
+                        <option disabled selected value="">Tipo de Resposta</option>
+                        <option value="0">Texto</option>
+                        <option value="1">Texto Grande</option>
+                        <option value="2">Multipla Escolha</option>
+                        <option value="2">Caixa de Seleção</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="botao_add_pergunta_etapa1" value=1 onclick="addPergunta(this.id); return false" style="float: right;margin-right: 1%;"><i class='fa fa-plus'></i></button>
+                <button class="btn" id="botao_remove_pergunta_etapa1" disabled value=1 onclick="removePergunta(this.id); return false" style="float: right;margin-right: 1%;"><i class='fa fa-minus'></i></button>
+                
+            </div>
+            <p><h3><strong>Selecionar Candidatos</strong></h3></p>            
+
+            <div id="div_search_table" class="table-responsive">
+                <table id="search_table" class="table-bordered myTable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;"></th>
+                            <th style="text-align: center;">Nome</th>
+                            <th style="text-align: center;">Sexo</th>
+                            <th style="text-align: center;">Telefone</th>
+                            <th style="text-align: center;display: none;">Email</th>
+                            <th style="text-align: center;">Nascimento</th>
+                            <th style="text-align: center;">Cargo(s) Pretendido(s)</th>
+                            <th style="text-align: center;">Info</th>
+                            <th style="display: none;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for linha in candidato%}
+                            <tr id="tr_{{linha['id']}}"> 
+                                <td style='text-align:center;'><input type="checkbox" value="{{linha['id']}}"></td>
+                                <td style="text-align: center;"><nobr>{{linha["nome"]}}</nobr></td>
+                                <td style="text-align: center;">
+                                {% if linha["sexo"] == 0 %}    
+                                    Masculino
+                                {% endif %}
+                                {% if linha["sexo"] == 1 %}    
+                                    Feminino
+                                {% endif %}
+                                </td>
+                                <td style="text-align: center;">{{linha["telefone"]}}</td>
+                                <td style="text-align: center;display: none;">{{linha["email"]}}</td>
+                                <td style="text-align: center;">{{linha["data_nascimento"]}}</td>
+                                <td style="text-align: center;">
+                                    {% for cargo in cargo_pretendido%}
+                                        {%if cargo['id_candidato'] == linha['id']%}
+                                            <nobr>{{cargo['descricao_cargo']}}</nobr> <br>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td style='text-align:center;'><button value="{{linha['id']}}" onclick="mostraModal(this.value);return false" class='btn'><i class='fa fa-info'></i></button></td>
+                                <td style="display: none;">COLOQUE AQUI TAGS DE BUSCA</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="info_candidato">
+                        <div class="card mb-4" style="margin-top: 2%;">
+                            <h4 class="mt-4 mb-3"><strong>Dados do Candidato</strong></h4>
+                            <div id="table_candidato_selecionado" class="card-body">
+                                <table id="candidato_selecionado" class="table user-view-table m-0">
+                                
+                                </table>
+                            </div>
+                            <hr class="border-light m-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="allList" style="display: none;">
+                <div id="lista_candidato">{{candidato}}</div>
+                <div id="lista_formacao">{{formacao}}</div>
+                <div id="lista_experiencia">{{experiencia}}</div>
+                <div id="lista_cargo_pretendido">{{cargo_pretendido}}</div>
+                <div id="lista_cnh">{{cnh}}</div>
+                <div id="lista_deficiencia">{{deficiencia}}</div>
+                <div id="lista_habilidade">{{habilidade}}</div>
+            </div>
+            <div id="div_candidatos_selecionados">
+                <input type="hidden" id="numero_candidatos_selecionados" name="numero_candidatos_selecionados" value="0">
+            </div>
+        </form>  
+        <br><p class="form-inline">  
+            <form action="/adm" method ="POST">
+                <input style="float: left;" type="submit" class="form-control btnContact" value="Voltar"/>
+            </form>
+        </p>
+        
+        <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/searchTable.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/etapas_processo.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename = 'scripts/autocomplete.js') }}"></script>
+    </div>
+{% endblock %}

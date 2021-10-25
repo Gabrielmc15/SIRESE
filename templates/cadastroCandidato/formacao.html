@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="container contact-form" style="width: 86%;">
+
+        <div class="media align-items-center py-3 mb-3" style="padding: 10px;">
+            <div class="media-body ml-4">
+              <h3 class="font-weight-bold mb-0" style="text-align: center;margin-left: 12%;"><strong> Experiências</strong></h3>
+              <img style="float: left;width: 25%;" class="img-fluid" src="{{url_for('static', filename='images/logo-grupo.png')}}" /><br>
+            </div>
+        </div>
+        
+        <div class="col-sm-12">
+            <form name="formulario" id="formulario" onsubmit="return validateFormFormacao()" action="/informacoes_adicionais" method = "POST">
+
+                <P><h3 style="text-align: left;"><strong> Formação </strong></h3></P> 
+                <p>Possuo Formação: 
+                    <label class="switch">
+                        <input id="formacao_checkbox" type="checkbox" onclick="show('formacao')" checked style="text-align: right;">
+                        <span class="slider round"></span>
+                    </label>
+                </p>
+                <div id="div_formacao" style="display: block">
+                    <div id="div_curso">
+                        Curso:<span style="color:rgb(207, 27, 27);">*</span> <input class="form-control" autocomplete="off" required id="curso" name="curso" value="" placeholder="Ex: Administração.." type="text" size="10">
+                    </div>
+                    <div id="div_instituicao">
+                        Instituição:<span style="color:rgb(207, 27, 27);">*</span> <input class="form-control" autocomplete="off" required id="instituicao" name="instituicao" value="" placeholder="Ex: UFMA.." type="text" size="10">
+                    </div>
+                    Nível:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="nivel" name="nivel" >
+                        <option disabled selected value="">Selecionar</option>
+                        <option value="Superior">Superior</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Especialização">Especialização</option>
+                        <option value="Certificação">Certificação</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                    Situação:<span style="color:rgb(207, 27, 27);">*</span> <select class="form-control" required id="situacao" name="situacao" onchange="checkformacao()">
+                        <option disabled selected value="">Selecionar</option>
+                        <option value="0">Completo</option>
+                        <option value="1">Cursando</option>
+                        <option value="2">Trancado</option>
+                    </select>
+                
+                    Ano de Início:<span style="color:rgb(207, 27, 27);">*</span> <input class="form-control" autocomplete="off" required id="inicio" name="inicio" value="" placeholder="Ex: 2019.." type="text" size="10">
+                    <div>
+                        Ano de Conclusão<span style="color:rgb(207, 27, 27);">*</span> <span id="previsao_terminio_text" style="display:none;">(Previsto)</span> :
+                    </div>
+                    <input class="form-control" autocomplete="off" required id="terminio_formacao" name="terminio_formacao" value="" placeholder="Ex: 2021.." type="text" size="10">                                                                                         
+                    <p><span id="texto_anos" style="color:rgb(207, 27, 27); display: none;">Ano de Início e/ou de Conclusão Inválido(s).</span></p>
+                </div>
+                <input type="button" id="add_formacao_button" disabled class="form-control btnContact" value="Adicionar Formação" onclick="addRow('formacao');attRow('formacao')" style="float: right;"/>
+                <table id="table_formacao" class="table-responsive table table-striped table-bordered center" style="display: none; width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Curso</th>
+                            <th style="text-align:center">Instituição</th>
+                            <th style="text-align:center">Nível</th>
+                            <th style="text-align:center">Situação</th>
+                            <th style="text-align:center">Ano de Início</th>
+                            <th style="text-align:center">Ano de Conclusão</th>
+                            <th style="text-align:center"></th>
+                        </tr>
+                    </thead>
+                </table>
+                <p><h3><strong> Experiência </strong></h3></p>
+                <p>Possuo Experiência: 
+                    <label class="switch">
+                        <input id="experiencia_checkbox" type="checkbox" onclick="show('experiencia')" checked style="text-align: right;">
+                        <span class="slider round"></span>
+                    </label>
+                </p>
+                <p id="p_colaborador">Sou Colaborador do Grupo Dimensão: 
+                    <label class="switch">
+                        <input id="colaborador_checkbox" type="checkbox" style="text-align: right;">
+                        <span class="slider round"></span>
+                    </label>
+                </p>
+                <div id="div_experiencia" style="display:block">
+                    Empresa:<span style="color:rgb(207, 27, 27);">*</span> <input  class="form-control" autocomplete="off" required id="empresa" name="empresa" placeholder="Empresa" type="text" size="10">
+                    Cargo:<span style="color:rgb(207, 27, 27);">*</span> <input  class="form-control" autocomplete="off" required id="cargo_exp" name="cargo" placeholder="Cargo" type="text" size="10">
+                    Ano de Entrada: <span style="color:rgb(207, 27, 27);">*</span> <input class="form-control" required type="text" id="ano_inicio_experiencia" name="ano_inicio_experiencia">
+                    <span id="texto_ano_saida">Ano de Saída: </span><span id="span_ano_saida" style="color:rgb(207, 27, 27);">*</span> <input class="form-control" required type="text" id="ano_fim_experiencia" name="ano_fim_experiencia">
+                    <input id="exp_ano_atual_checkbox" type="checkbox" value="-" name="ano_fim_experiencia" style="text-align: right;"><span> É o meu emprego atual.</span><br><br>
+                    Principais Atividades:<span style="color:rgb(207, 27, 27);">*</span> <textarea  class="form-control" required autocomplete="off" id="descricao_experiencia" name="descricao_experiencia" rows ="3" style="resize:vertical"></textarea>
+                </div>
+                <input class="form-control btnContact" type="button" disabled id="add_experiencia_button" value="Adicionar Experiencia" onclick="addRow('experiencia');attRow('experiencia')" style="float: right;">
+                <div style="width: auto;">
+                    <table id="table_experiencia" class="table-responsive table table-striped table-bordered center" style="display: none; width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Empresa</th>
+                                <th style="text-align:center">Cargo</th>
+                                <th style="text-align:center">Entrada</th>
+                                <th style="text-align:center">Saída</th>
+                                <th style="text-align:center">Descrição</th>
+                                <th style="text-align:center"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <input id="formulario_formacao" name="formulario_formacao" value="1" type="hidden">
+                <p><h3><strong> Habilidades </strong></h3></p>
+                <p>Adicione suass habilidades em forma de palavras chave. Ex: Scrum, Gestão, PHP.</p>
+            
+                <div class="input-group" id="div_habilidade">
+                    <input type="text" id="habilidade" name="habilidade" value="" placeholder="Habilidade" class="form-control">
+                    <span class="input-group-btn">
+                        <input style="width: auto;" class="form-control btnContact"  type="button" id="add_habilidade_button" value="+" >
+                    </span>
+                </div>
+            
+                <div id="div_tags_habilidade" style="margin-top: 1.5%;display:inline-block;width:100%;text-align: center;"></div>
+                <p style="display: inline-block;margin-top: 3%;">
+                    <div>
+                        <input class="form-control btnContact" id="button_proximo" type="submit" value="Próximo" style="float: right; margin-bottom: 2%;">
+                    </div>
+                </p>
+            </form>
+            <form action = "/dados_candidato" method ="POST">
+                <input class="form-control btnContact" type="submit" value="Voltar" style="float: left;">
+            </form>
+        </div>
+
+        
+        <div id="lista_experiencias" style="display: none;">{% if formulario_formacao%}{{formulario_formacao}}{% endif %}</div>
+        
+    </div>
+{% endblock %}
